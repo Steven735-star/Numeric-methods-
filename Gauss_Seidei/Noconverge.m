@@ -15,13 +15,33 @@ A = [ 2,  3,  1,  5,  7;
 
 b = rand(n, 1);           % Vector independiente aleatorio
 
+% Verificar si es diagonalmente dominante
+es_dominante = true;
+for i = 1:n
+    suma_fila = sum(abs(A(i,:))) - abs(A(i,i));
+    if abs(A(i,i)) <= suma_fila
+        es_dominante = false;
+        break;
+    end
+end
+fprintf('¿La matriz es diagonalmente dominante? %s\n', mat2str(es_dominante));
+
 % Parámetros
 x0 = zeros(n, 1);         % Aproximación inicial
 tol = 1e-6;               % Tolerancia
 max_iter = 100;           % Número máximo de iteraciones
 
 % Ejecución de métodos
-[x_jacobi, errores_jacobi] = jacobi(A, b, x0, tol, max_iter);
+[x_jacobi, errores_jacobi] = metodo_jacobi(A, b, x0, tol, max_iter);
+[x_gs, errores_gs] = metodo_gauss_seidel(A, b, x0, tol, max_iter);
+
+% Solución exacta para referencia
+x_exacta = A \ b;
+err_jacobi = norm(x_jacobi - x_exacta) / norm(x_exacta);
+err_gs = norm(x_gs - x_exacta) / norm(x_exacta);
+
+fprintf('Error final Jacobi: %.10e\n', err_jacobi);
+fprintf('Error final Gauss-Seidel: %.10e\n', err_gs);
 
 % Gráfica de la convergencia
 figure;
@@ -34,4 +54,5 @@ xlabel('Iteración');
 ylabel('Error relativo (escala log)');
 title('Comparación de Jacobi y Gauss-Seidel (Sistema No Convergente)');
 legend('Jacobi', 'Gauss-Seidel', 'Location', 'best');
+
 
