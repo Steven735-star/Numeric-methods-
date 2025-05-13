@@ -64,7 +64,7 @@ results(3).mem = mem3;
 % --- 4. Jacobi ---
 fprintf('Ejecutando Jacobi...\n');
 x0 = zeros(n,1);
-tol = 1e-8; max_iter = 1000;
+tol = 1e-15; max_iter = 1000;
 tic;
 [x4, ~] = metodo_jacobi(A, b, x0, tol, max_iter);
 time4 = toc;
